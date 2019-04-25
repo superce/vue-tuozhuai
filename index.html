@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  .app{
+    position: relative;
+  }
+  .box{
+    position: absolute;
+    top: 0;left: 0;
+    width: 150px;height: 150px;background: #ccc;
+  }
+</style>
+<body>
+  <div class="app">
+    <div class="box" @mousedown='move'>
+      {{positionX}}
+      {{positionY}}
+    </div>
+  </div>
+  <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+  <script>
+    var app = new Vue({
+      el:'.app',
+      data:{
+        positionX:0,
+        positionY:0
+      },
+      methods:{
+        move(e){
+
+          // console.log(e)
+          let odiv = e.target;        //获取目标元素
+            
+            //算出鼠标相对元素的位置
+            let disX = e.clientX - odiv.offsetLeft;
+            let disY = e.clientY - odiv.offsetTop;
+            document.onmousemove = (e)=>{       //鼠标按下并移动的事件
+                //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
+                let left = e.clientX - disX;    
+                let top = e.clientY - disY;
+                
+                //绑定元素位置到positionX和positionY上面
+                this.positionX = top;
+                this.positionY = left;
+                
+                //移动当前元素
+                odiv.style.left = left + 'px';
+                odiv.style.top = top + 'px';
+            };
+            document.onmouseup = (e) => {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
+        }
+      }
+    })
+  </script>
+</body>
+</html>
